@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=johndoe
+      - POSTGRES_PASSWORD=randompassword
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # api:
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     # Use 'db' (the service name) instead of 'localhost'
+  #     - DATABASE_URL=postgresql://admin:password123@db:5432/mydb?schema=public
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules # Prevents local node_modules from overwriting container's
+  #   depends_on:
+  #     - db
+
+volumes:
+  postgres_data:
