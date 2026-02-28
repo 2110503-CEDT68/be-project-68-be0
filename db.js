@@ -1,6 +1,14 @@
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const client = new MongoClient(process.env.DATABASE_URL);
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL environment variable is not defined');
+}
+
+const client = new MongoClient(connectionString);
 
 let db;
 

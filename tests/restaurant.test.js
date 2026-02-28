@@ -1,17 +1,35 @@
 import { jest, describe, it, expect, afterEach, beforeAll } from '@jest/globals';
 import request from 'supertest';
-import app from '../index.js';
-import Restaurant from '../models/Restaurant.js';
 
-jest.mock('../models/Restaurant.js');
-jest.mock('../db.js');
+const mockRestaurant = {
+  findAllWithRelations: jest.fn(),
+  findWithRelations: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn()
+};
+
+const mockDB = {
+  collection: jest.fn()
+};
+
+const mockConnectDB = jest.fn().mockResolvedValue(mockDB);
+const mockGetDB = jest.fn(() => mockDB);
+
+jest.unstable_mockModule('../models/Restaurant.js', () => ({
+  default: mockRestaurant
+}));
+
+jest.unstable_mockModule('../db.js', () => ({
+  connectDB: mockConnectDB,
+  getDB: mockGetDB,
+  default: { connectDB: mockConnectDB, getDB: mockGetDB }
+}));
+
+const { default: app } = await import('../index.js');
+const { default: Restaurant } = await import('../models/Restaurant.js');
 
 describe('Restaurant CRUD Routes', () => {
-  beforeAll(async () => {
-    const { connectDB } = await import('../db.js');
-    await connectDB();
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -21,7 +39,7 @@ describe('Restaurant CRUD Routes', () => {
       const mockRestaurants = [
         { _id: '1', name: 'Res 1', address: 'Add 1', telephone_number: '123', open_time: new Date(), close_time: new Date(), tables: [], reservations: [] }
       ];
-      Restaurant.findAllWithRelations.mockResolvedValue(mockRestaurants);
+      mockRestaurant.findAllWithRelations.mockResolvedValue(mockRestaurants);
 
       const res = await request(app).get('/api/restaurants');
       expect(res.statusCode).toEqual(200);
@@ -30,7 +48,7 @@ describe('Restaurant CRUD Routes', () => {
     });
 
     it('should return 500 on error', async () => {
-      Restaurant.findAllWithRelations.mockRejectedValue(new Error('DB Error'));
+      mockRestaurant.findAllWithRelations.mockRejectedValue(new Error('DB Error'));
       const res = await request(app).get('/api/restaurants');
       expect(res.statusCode).toEqual(500);
     });
@@ -38,8 +56,8 @@ describe('Restaurant CRUD Routes', () => {
 
   describe('GET /api/restaurants/:id', () => {
     it('should return a single restaurant', async () => {
-      const mockRestaurant = { _id: '1', name: 'Res 1', address: 'Add 1', telephone_number: '123', open_time: new Date(), close_time: new Date(), tables: [], reservations: [] };
-      Restaurant.findWithRelations.mockResolvedValue(mockRestaurant);
+      const mockRestaurantData = { _id: '1', name: 'Res 1', address: 'Add 1', telephone_number: '123', open_time: new Date(), close_time: new Date(), tables: [], reservations: [] };
+      mockRestaurant.findWithRelations.mockResolvedValue(mockRestaurantData);
 
       const res = await request(app).get('/api/restaurants/1');
       expect(res.statusCode).toEqual(200);
@@ -47,7 +65,7 @@ describe('Restaurant CRUD Routes', () => {
     });
 
     it('should return 404 if not found', async () => {
-      Restaurant.findWithRelations.mockResolvedValue(null);
+      mockRestaurant.findWithRelations.mockResolvedValue(null);
       const res = await request(app).get('/api/restaurants/999');
       expect(res.statusCode).toEqual(404);
     });
@@ -56,7 +74,7 @@ describe('Restaurant CRUD Routes', () => {
   describe('POST /api/restaurants', () => {
     it('should create a new restaurant', async () => {
       const newRes = { name: 'New Res', address: 'New Add', telephone_number: '000', open_time: '2023-01-01T08:00:00Z', close_time: '2023-01-01T22:00:00Z' };
-      Restaurant.create.mockResolvedValue({ _id: '2', ...newRes });
+      mockRestaurant.create.mockResolvedValue({ _id: '2', ...newRes });
 
       const res = await request(app).post('/api/restaurants').send(newRes);
       expect(res.statusCode).toEqual(201);
@@ -66,7 +84,7 @@ describe('Restaurant CRUD Routes', () => {
 
   describe('PUT /api/restaurants/:id', () => {
     it('should update a restaurant', async () => {
-      Restaurant.update.mockResolvedValue({ _id: '1', name: 'Updated' });
+      mockRestaurant.update.mockResolvedValue({ _id: '1', name: 'Updated' });
       const res = await request(app).put('/api/restaurants/1').send({ name: 'Updated' });
       expect(res.statusCode).toEqual(200);
       expect(res.body.name).toBe('Updated');
@@ -75,7 +93,7 @@ describe('Restaurant CRUD Routes', () => {
 
   describe('DELETE /api/restaurants/:id', () => {
     it('should delete a restaurant', async () => {
-      Restaurant.delete.mockResolvedValue(true);
+      mockRestaurant.delete.mockResolvedValue(true);
       const res = await request(app).delete('/api/restaurants/1');
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe('Restaurant deleted successfully');

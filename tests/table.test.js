@@ -1,17 +1,38 @@
-import { jest, describe, it, expect, afterEach, beforeAll } from '@jest/globals';
+import { jest, describe, it, expect, afterEach } from '@jest/globals';
 import request from 'supertest';
-import app from '../index.js';
-import Table from '../models/Table.js';
 
-jest.mock('../models/Table.js');
-jest.mock('../db.js');
+// Mock the models and db before importing app
+const mockTable = {
+  findAll: jest.fn(),
+  findById: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn()
+};
+
+const mockDB = {
+  collection: jest.fn()
+};
+
+const mockConnectDB = jest.fn().mockResolvedValue(mockDB);
+const mockGetDB = jest.fn(() => mockDB);
+
+// Set up module mocks
+jest.unstable_mockModule('../models/Table.js', () => ({
+  default: mockTable
+}));
+
+jest.unstable_mockModule('../db.js', () => ({
+  connectDB: mockConnectDB,
+  getDB: mockGetDB,
+  default: { connectDB: mockConnectDB, getDB: mockGetDB }
+}));
+
+// Import app after mocks are set up
+const { default: app } = await import('../index.js');
+const { default: Table } = await import('../models/Table.js');
 
 describe('Table CRUD Routes', () => {
-  beforeAll(async () => {
-    const { connectDB } = await import('../db.js');
-    await connectDB();
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -21,7 +42,7 @@ describe('Table CRUD Routes', () => {
       const mockTables = [
         { _id: '1', restaurant_id: 'res1', capacity: 4, status: 'AVAILABLE' }
       ];
-      Table.findAll.mockResolvedValue(mockTables);
+      mockTable.findAll.mockResolvedValue(mockTables);
 
       const res = await request(app).get('/api/tables');
       expect(res.statusCode).toEqual(200);
@@ -30,9 +51,9 @@ describe('Table CRUD Routes', () => {
     });
 
     it('should filter by restaurant_id', async () => {
-      Table.findAll.mockResolvedValue([]);
+      mockTable.findAll.mockResolvedValue([]);
       await request(app).get('/api/tables?restaurant_id=123');
-      expect(Table.findAll).toHaveBeenCalledWith({
+      expect(mockTable.findAll).toHaveBeenCalledWith({
         restaurant_id: '123'
       });
     });
@@ -40,8 +61,8 @@ describe('Table CRUD Routes', () => {
 
   describe('GET /api/tables/:id', () => {
     it('should return a single table', async () => {
-      const mockTable = { _id: '1', restaurant_id: 'res1', capacity: 4, status: 'AVAILABLE' };
-      Table.findById.mockResolvedValue(mockTable);
+      const mockTableData = { _id: '1', restaurant_id: 'res1', capacity: 4, status: 'AVAILABLE' };
+      mockTable.findById.mockResolvedValue(mockTableData);
 
       const res = await request(app).get('/api/tables/1');
       expect(res.statusCode).toEqual(200);
@@ -52,7 +73,7 @@ describe('Table CRUD Routes', () => {
   describe('POST /api/tables', () => {
     it('should create a new table', async () => {
       const newTable = { restaurant_id: 'res1', capacity: 2 };
-      Table.create.mockResolvedValue({ _id: '2', ...newTable, status: 'AVAILABLE' });
+      mockTable.create.mockResolvedValue({ _id: '2', ...newTable, status: 'AVAILABLE' });
 
       const res = await request(app).post('/api/tables').send(newTable);
       expect(res.statusCode).toEqual(201);
@@ -62,7 +83,7 @@ describe('Table CRUD Routes', () => {
 
   describe('PUT /api/tables/:id', () => {
     it('should update a table', async () => {
-      Table.update.mockResolvedValue({ _id: '1', status: 'OCCUPIED' });
+      mockTable.update.mockResolvedValue({ _id: '1', status: 'OCCUPIED' });
       const res = await request(app).put('/api/tables/1').send({ status: 'OCCUPIED' });
       expect(res.statusCode).toEqual(200);
       expect(res.body.status).toBe('OCCUPIED');
@@ -71,7 +92,7 @@ describe('Table CRUD Routes', () => {
 
   describe('DELETE /api/tables/:id', () => {
     it('should delete a table', async () => {
-      Table.delete.mockResolvedValue(true);
+      mockTable.delete.mockResolvedValue(true);
       const res = await request(app).delete('/api/tables/1');
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toBe('Table deleted successfully');

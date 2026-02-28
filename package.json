@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/2110503-CEDT68/be-project-68-be0#readme",
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mongodb": "^6.3.0",
     "nodemon": "^3.1.14"
