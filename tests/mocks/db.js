@@ -1,20 +1,18 @@
 import { jest } from '@jest/globals';
 
-const prismaMock = {
-  restaurant: {
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-  },
-  table: {
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-  }
+const mockDB = {
+  collection: jest.fn(() => ({
+    find: jest.fn(() => ({
+      toArray: jest.fn()
+    })),
+    findOne: jest.fn(),
+    insertOne: jest.fn(),
+    updateOne: jest.fn(),
+    deleteOne: jest.fn()
+  }))
 };
 
-export default prismaMock;
+export const connectDB = jest.fn().mockResolvedValue(mockDB);
+export const getDB = jest.fn(() => mockDB);
+
+export default { connectDB, getDB };

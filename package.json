@@ -19,11 +19,9 @@
   },
   "homepage": "https://github.com/2110503-CEDT68/be-project-68-be0#readme",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.4.1",
-    "@prisma/client": "^7.4.1",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14",
-    "pg": "^8.19.0"
+    "mongodb": "^6.3.0",
+    "nodemon": "^3.1.14"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -34,7 +32,6 @@
     "babel-plugin-transform-import-meta": "^2.3.3",
     "cross-env": "^10.1.0",
     "jest": "^30.2.0",
-    "prisma": "^7.4.1",
     "supertest": "^7.2.2"
   }
 }

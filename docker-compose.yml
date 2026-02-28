@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15-alpine
+    image: mongo:7-jammy
     restart: always
     environment:
-      - POSTGRES_USER=johndoe
-      - POSTGRES_PASSWORD=randompassword
-      - POSTGRES_DB=mydb
+      - MONGO_INITDB_ROOT_USERNAME=johndoe
+      - MONGO_INITDB_ROOT_PASSWORD=randompassword
+      - MONGO_INITDB_DATABASE=mydb
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
   # api:
   #   build: .
@@ -19,7 +19,7 @@ services:
   #     - "3000:3000"
   #   environment:
   #     # Use 'db' (the service name) instead of 'localhost'
-  #     - DATABASE_URL=postgresql://admin:password123@db:5432/mydb?schema=public
+  #     - DATABASE_URL=mongodb://johndoe:randompassword@db:27017/mydb?authSource=admin
   #   volumes:
   #     - .:/app
   #     - /app/node_modules # Prevents local node_modules from overwriting container's
@@ -27,4 +27,4 @@ services:
   #     - db
 
 volumes:
-  postgres_data:
+  mongo_data:

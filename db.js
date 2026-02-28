@@ -1,15 +1,23 @@
-import { PrismaPg } from '@prisma/adapter-pg';
-import pg from 'pg';
-import { PrismaClient } from './generated/prisma/client.ts';
+import { MongoClient } from 'mongodb';
 
-const { Pool } = pg;
+const client = new MongoClient(process.env.DATABASE_URL);
 
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL 
-});
+let db;
 
-const adapter = new PrismaPg(pool);
+export async function connectDB() {
+  if (!db) {
+    await client.connect();
+    db = client.db();
+    console.log('Connected to MongoDB');
+  }
+  return db;
+}
 
-const prisma = new PrismaClient({ adapter });
+export function getDB() {
+  if (!db) {
+    throw new Error('Database not initialized. Call connectDB first.');
+  }
+  return db;
+}
 
-export default prisma;
+export default { connectDB, getDB };
