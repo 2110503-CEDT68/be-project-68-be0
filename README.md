@@ -8,19 +8,31 @@
    ```bash
    npm install
    ```
+
 2. **Setup environment variables**:
-   Create a `.env` file based on `.env.example` and fill in your `DATABASE_URL`.
+   Create a `.env` file based on `.env.example` and configure your MongoDB connection:
    ```bash
    cp .env.example .env
    ```
-3. **Database Migration and Prisma Client Generation**:
-   Run the following commands to migrate the database and generate the Prisma Client.
-   ```bash
-   npx prisma migrate dev
-   npx prisma generate
+   
+   Update the `.env` file with your MongoDB connection string:
    ```
+   PORT=3000
+   DATABASE_URL="mongodb://johndoe:randompassword@localhost:27017/mydb?authSource=admin"
+   ```
+
+3. **Start MongoDB with Docker**:
+   ```bash
+   docker-compose up -d
+   ```
+
 4. **Run the server**:
    Start the development server:
    ```bash
    npm run dev
+   ```
+
+5. **Run tests**:
+   ```bash
+   npm test
    ```
