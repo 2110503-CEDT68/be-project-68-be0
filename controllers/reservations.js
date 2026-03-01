@@ -16,7 +16,9 @@ export const getReservations = async (req, res) => {
             query.user = req.user.id;
         }
 
-        const reservations = await Reservation.findAll(query);
+        const reservations = await Reservation.find(query)
+            .populate('user', 'name email')
+            .populate('restaurant_id', 'name address');
 
         res.status(200).json({ success: true, count: reservations.length, data: reservations });
     } catch (err) {
@@ -29,13 +31,15 @@ export const getReservations = async (req, res) => {
 // @access  Private
 export const getReservation = async (req, res) => {
     try {
-        const reservation = await Reservation.findById(req.params.id);
+        const reservation = await Reservation.findById(req.params.id)
+            .populate('user', 'name email')
+            .populate('restaurant_id', 'name address');
 
         if (!reservation) {
             return res.status(404).json({ success: false, message: `No reservation with the id of ${req.params.id}` });
         }
 
-        if (reservation.user.toString() !== req.user.id.toString() && req.user.role !== 'admin') {
+        if (reservation.user._id.toString() !== req.user.id.toString() && req.user.role !== 'admin') {
             return res.status(401).json({ success: false, message: `User ${req.user.id} is not authorized to view this reservation` });
         }
 
@@ -88,22 +92,24 @@ export const addReservation = async (req, res) => {
             }
         }
 
-        const existingReservations = await Reservation.findByUser(req.user.id);
+        // Check existing reservations (max 3 for user)
+        const existingReservations = await Reservation.find({ user: req.user.id });
 
         if (existingReservations.length >= 3 && req.user.role !== 'admin') {
             return res.status(400).json({ success: false, message: `The user with ID ${req.user.id} has already made 3 reservations` });
         }
 
+        // Check duplicate reservation on same day at same restaurant
         const sameDayStart = new Date(resDate);
         sameDayStart.setHours(0, 0, 0, 0);
         const sameDayEnd = new Date(resDate);
         sameDayEnd.setHours(23, 59, 59, 999);
 
-        const duplicate = existingReservations.find(r =>
-            r.restaurant_id === restaurant_id &&
-            new Date(r.reservation_date) >= sameDayStart &&
-            new Date(r.reservation_date) <= sameDayEnd
-        );
+        const duplicate = await Reservation.findOne({
+            user: req.user.id,
+            restaurant_id,
+            reservation_date: { $gte: sameDayStart, $lte: sameDayEnd }
+        });
 
         if (duplicate) {
             return res.status(400).json({ success: false, message: 'You already have a reservation at this restaurant on this date' });
@@ -114,7 +120,8 @@ export const addReservation = async (req, res) => {
             restaurant_id,
             restaurant_name: restaurant.name,
             reservation_date: resDate,
-            quantity: parseInt(req.body.quantity) || 1
+            quantity: parseInt(req.body.quantity) || 1,
+            table: table || null
         });
 
         res.status(201).json({ success: true, data: reservation });
@@ -138,8 +145,6 @@ export const updateReservation = async (req, res) => {
             return res.status(401).json({ success: false, message: `User ${req.user.id} is not authorized to update this reservation` });
         }
 
-        const updateData = {};
-
         if (req.body.reservation_date) {
             const resDate = new Date(req.body.reservation_date);
 
@@ -159,13 +164,12 @@ export const updateReservation = async (req, res) => {
                     return res.status(400).json({ success: false, message: `Restaurant is open from ${new Date(restaurant.open_time).toTimeString().slice(0, 5)} to ${new Date(restaurant.close_time).toTimeString().slice(0, 5)}` });
                 }
             }
-
-            updateData.reservation_date = resDate;
         }
 
-        if (req.body.restaurant_id) updateData.restaurant_id = req.body.restaurant_id;
-
-        reservation = await Reservation.update(req.params.id, updateData);
+        reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
 
         res.status(200).json({ success: true, data: reservation });
     } catch (err) {
@@ -195,7 +199,7 @@ export const deleteReservation = async (req, res) => {
             }
         }
 
-        await Reservation.delete(req.params.id);
+        await reservation.deleteOne();
 
         res.status(200).json({ success: true, data: {} });
     } catch (err) {
