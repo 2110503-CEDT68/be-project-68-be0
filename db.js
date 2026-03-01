@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -16,6 +17,7 @@ export async function connectDB() {
   if (!db) {
     await client.connect();
     db = client.db();
+    await mongoose.connect(connectionString);
     console.log('Connected to MongoDB');
   }
   return db;

@@ -10,6 +10,10 @@ class Reservation {
     return await this.collection().find(filter).toArray();
   }
 
+  static async findByUser(userId) {
+    return await this.collection().find({ user: userId }).toArray();
+  }
+
   static async findById(id) {
     return await this.collection().findOne({ _id: new ObjectId(id) });
   }
@@ -34,6 +38,11 @@ class Reservation {
   static async delete(id) {
     const result = await this.collection().deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount > 0;
+  }
+
+  static async deleteByRestaurant(restaurantId) {
+    const result = await this.collection().deleteMany({ restaurant_id: restaurantId });
+    return result.deletedCount;
   }
 }
 
