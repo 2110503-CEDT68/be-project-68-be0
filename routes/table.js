@@ -1,17 +1,18 @@
 import express from 'express';
 import Table from '../models/Table.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
     const { restaurant_id } = req.query;
-    
+
     const filter = {};
     if (restaurant_id) {
       filter.restaurant_id = restaurant_id;
     }
-    
+
     const tables = await Table.findAll(filter);
     res.json(tables);
   } catch (error) {
@@ -32,10 +33,18 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', protect, authorize('admin'), async (req, res) => {
   try {
     const { restaurant_id, capacity, status } = req.body;
-    
+
+    if (!restaurant_id) {
+      return res.status(400).json({ error: 'Please provide restaurant_id' });
+    }
+
+    if (!capacity || parseInt(capacity, 10) <= 0) {
+      return res.status(400).json({ error: 'Capacity must be a positive number' });
+    }
+
     const newTable = await Table.create({
       restaurant_id,
       capacity: parseInt(capacity, 10),
@@ -47,14 +56,23 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', protect, authorize('admin'), async (req, res) => {
   try {
+    const table = await Table.findById(req.params.id);
+    if (!table) {
+      return res.status(404).json({ error: 'Table not found' });
+    }
+
     const { restaurant_id, capacity, status } = req.body;
-    
-    // Build update data
+
     const updateData = {};
     if (restaurant_id) updateData.restaurant_id = restaurant_id;
-    if (capacity !== undefined) updateData.capacity = parseInt(capacity, 10);
+    if (capacity !== undefined) {
+      if (parseInt(capacity, 10) <= 0) {
+        return res.status(400).json({ error: 'Capacity must be a positive number' });
+      }
+      updateData.capacity = parseInt(capacity, 10);
+    }
     if (status) updateData.status = status;
 
     const updatedTable = await Table.update(req.params.id, updateData);
@@ -64,7 +82,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', protect, authorize('admin'), async (req, res) => {
   try {
     const deleted = await Table.delete(req.params.id);
     if (deleted) {

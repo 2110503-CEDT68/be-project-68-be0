@@ -1,66 +1,38 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-// Protect routes (must be logged in)
-exports.protect = async(req, res, next) => {
+// Protect routes - must be logged in
+export const protect = async (req, res, next) => {
     let token;
 
-    // Get token from header or cookie
-    if(req.headers.authorization && req.headers.authorization.startWith('Bearer')) {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    }
-    else if(req.cookies.token) {
+    } else if (req.cookies.token) {
         token = req.cookies.token;
     }
 
-    // Make sure token exists
-    if(!token || token == 'null') {
-        return res.status(401).json({
-            success: false,
-            msg: 'Not authorized to access this route'
-        });
+    if (!token || token === 'null') {
+        return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
     }
-
-    console.log(token);
 
     try {
-        // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-        console.log(decoded);
-
-        // Attach user to request
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = await User.findById(decoded.id);
-
-        if(!req.user) {
-            return res.status(401).json({
-                success: false,
-                msg: 'User not found'
-            });
-        }
-
         next();
+    } catch (err) {
+        return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
     }
-    catch(err) {
-        console.log(err.stack);
+};
 
-        return res.status(401).json({
-            success: false,
-            msg: 'Not authorize to access this route'
-        });
-    }
-}
-
-// Grant access to specific roles (right role)
-exports.authorize = (...roles) => {
-    return(req, res, next) => {
-        if(!roles.includes(req.user.roles)) {
+// Grant access to specific roles only
+export const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
             return res.status(403).json({
                 success: false,
-                msg: `User role ${req.user.role} is not authorized to access this route`
+                message: `User role '${req.user.role}' is not authorized to access this route`
             });
         }
-
         next();
-    }
-}
+    };
+};

@@ -49,7 +49,8 @@ class Restaurant {
     return {
       ...restaurant,
       tables,
-      reservations
+      reservations,
+      reservation_count: reservations.length
     };
   }
 
@@ -67,7 +68,7 @@ class Restaurant {
         return {
           ...restaurant,
           tables,
-          reservations
+          reservation_count: reservations.length
         };
       })
     );
