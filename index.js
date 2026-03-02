@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import hpp from "hpp";
@@ -17,7 +16,28 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(mongoSanitize());
+
+// Custom MongoDB sanitization middleware (Express 5 compatible)
+app.use((req, res, next) => {
+    const sanitize = (obj) => {
+        if (obj && typeof obj === 'object') {
+            Object.keys(obj).forEach(key => {
+                if (key.startsWith('$') || key.includes('.')) {
+                    delete obj[key];
+                } else if (typeof obj[key] === 'object') {
+                    sanitize(obj[key]);
+                }
+            });
+        }
+        return obj;
+    };
+    
+    if (req.body) sanitize(req.body);
+    if (req.query) sanitize(req.query);
+    if (req.params) sanitize(req.params);
+    next();
+});
+
 app.use(helmet());
 app.use(hpp());
 app.use(cors());
@@ -34,15 +54,22 @@ app.use('/api/tables', tableRoutes);
 app.use('/api/reservations', reservationRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
-    await connectDB();
-    const server = app.listen(process.env.PORT || 3000, () => {
-        console.log(`Server is running on port ${process.env.PORT}`);
-    });
+    try {
+        await connectDB();
+        console.log("Connected to database successfully!");
+        
+        const server = app.listen(process.env.PORT || 3000, () => {
+            console.log(`Server is running on port ${process.env.PORT}`);
+        });
 
-    process.on('unhandledRejection', (err, promise) => {
-        console.log(`Error: ${err.message}`);
-        server.close(() => process.exit(1));
-    });
+        process.on('unhandledRejection', (err) => {
+            console.log(`Error: ${err.message}`);
+            server.close(() => process.exit(1));
+        });
+    } catch (error) {
+        console.error("Failed to connect to database:", error);
+        process.exit(1);
+    }
 }
 
 export default app;
