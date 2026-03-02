@@ -6,7 +6,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import hpp from "hpp";
 import cors from "cors";
-import { connectDB } from './db.js';
+import connectDB from './db.js';
 import authRoutes from './routes/auth.js';
 import restaurantRoutes from './routes/restaurant.js';
 import tableRoutes from './routes/table.js';

@@ -1,78 +1,49 @@
-import { ObjectId } from 'mongodb';
-import { getDB } from '../db.js';
+import mongoose from 'mongoose';
 
-class Restaurant {
-  static collection() {
-    return getDB().collection('restaurants');
-  }
+const RestaurantSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Please add a name'],
+        unique: true,
+        trim: true,
+        maxlength: [50, 'Name cannot be more than 50 characters']
+    },
+    address: {
+        type: String,
+        required: [true, 'Please add an address']
+    },
+    telephone_number: {
+        type: String
+    },
+    open_time: {
+        type: Date
+    },
+    close_time: {
+        type: Date
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true}
+});
 
-  static async findAll(options = {}) {
-    return await this.collection().find({}).toArray();
-  }
+// Virtual populate reservations
+RestaurantSchema.virtual('reservations', {
+    ref: 'Reservation',
+    localField: '_id',
+    foreignField: 'restaurant_id',
+    justOne: false
+});
 
-  static async findById(id) {
-    return await this.collection().findOne({ _id: new ObjectId(id) });
-  }
+// Virtual populate tables
+RestaurantSchema.virtual('tables', {
+    ref: 'Table',
+    localField: '_id',
+    foreignField: 'restaurant_id',
+    justOne: false
+});
 
-  static async create(data) {
-    const result = await this.collection().insertOne({
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
-    return await this.findById(result.insertedId);
-  }
-
-  static async update(id, data) {
-    await this.collection().updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { ...data, updatedAt: new Date() } }
-    );
-    return await this.findById(id);
-  }
-
-  static async delete(id) {
-    const result = await this.collection().deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-
-  static async findWithRelations(id) {
-    const restaurant = await this.findById(id);
-    if (!restaurant) return null;
-
-    const db = getDB();
-    const [tables, reservations] = await Promise.all([
-      db.collection('tables').find({ restaurant_id: id }).toArray(),
-      db.collection('reservations').find({ restaurant_id: id }).toArray()
-    ]);
-
-    return {
-      ...restaurant,
-      tables,
-      reservations,
-      reservation_count: reservations.length
-    };
-  }
-
-  static async findAllWithRelations() {
-    const restaurants = await this.findAll();
-    const db = getDB();
-
-    return await Promise.all(
-      restaurants.map(async (restaurant) => {
-        const [tables, reservations] = await Promise.all([
-          db.collection('tables').find({ restaurant_id: restaurant._id.toString() }).toArray(),
-          db.collection('reservations').find({ restaurant_id: restaurant._id.toString() }).toArray()
-        ]);
-
-        return {
-          ...restaurant,
-          tables,
-          reservation_count: reservations.length
-        };
-      })
-    );
-  }
-}
-
-export default Restaurant;
+export default mongoose.model('Restaurant', RestaurantSchema);

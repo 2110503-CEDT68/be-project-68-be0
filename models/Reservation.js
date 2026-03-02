@@ -1,49 +1,36 @@
-import { ObjectId } from 'mongodb';
-import { getDB } from '../db.js';
+import mongoose from 'mongoose';
 
-class Reservation {
-  static collection() {
-    return getDB().collection('reservations');
-  }
+const ReservationSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    restaurant_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Restaurant',
+        required: true
+    },
+    restaurant_name: {
+        type: String
+    },
+    reservation_date: {
+        type: Date,
+        required: [true, 'Please add a reservation date']
+    },
+    quantity: {
+        type: Number,
+        default: 1,
+        min: [1, 'Quantity must be at least 1']
+    },
+    table: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Table'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
-  static async findAll(filter = {}) {
-    return await this.collection().find(filter).toArray();
-  }
-
-  static async findByUser(userId) {
-    return await this.collection().find({ user: userId }).toArray();
-  }
-
-  static async findById(id) {
-    return await this.collection().findOne({ _id: new ObjectId(id) });
-  }
-
-  static async create(data) {
-    const result = await this.collection().insertOne({
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
-    return await this.findById(result.insertedId);
-  }
-
-  static async update(id, data) {
-    await this.collection().updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { ...data, updatedAt: new Date() } }
-    );
-    return await this.findById(id);
-  }
-
-  static async delete(id) {
-    const result = await this.collection().deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-
-  static async deleteByRestaurant(restaurantId) {
-    const result = await this.collection().deleteMany({ restaurant_id: restaurantId });
-    return result.deletedCount;
-  }
-}
-
-export default Reservation;
+export default mongoose.model('Reservation', ReservationSchema);
