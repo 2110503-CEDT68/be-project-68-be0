@@ -1,0 +1,159 @@
+classDiagram
+    %% Models
+    class User {
+        -ObjectId _id
+        -String name
+        -String telephone_number
+        -String email
+        -String role
+        -String password
+        -Date createdAt
+        +getSignedJwtToken() String
+        +matchPassword(enteredPassword) Boolean
+    }
+
+    class Restaurant {
+        -ObjectId _id
+        -String name
+        -String address
+        -String telephone_number
+        -Date open_time
+        -Date close_time
+        -Date createdAt
+        +reservations virtual
+        +tables virtual
+    }
+
+    class Table {
+        -ObjectId _id
+        -ObjectId restaurant_id
+        -Number capacity
+        -String status
+        -Date createdAt
+    }
+
+    class Reservation {
+        -ObjectId _id
+        -ObjectId user
+        -ObjectId restaurant_id
+        -String restaurant_name
+        -Date reservation_date
+        -Number quantity
+        -ObjectId table
+        -Date createdAt
+    }
+
+    %% Controllers
+    class AuthController {
+        +register(req, res) void
+        +login(req, res) void
+        +logout(req, res) void
+        +getMe(req, res) void
+        -sendTokenResponse(user, statusCode, res) void
+    }
+
+    class RestaurantController {
+        +getRestaurants(req, res, next) void
+        +getRestaurant(req, res, next) void
+        +createRestaurant(req, res, next) void
+        +updateRestaurant(req, res, next) void
+        +deleteRestaurant(req, res, next) void
+    }
+
+    class ReservationController {
+        +getReservations(req, res) void
+        +getReservation(req, res) void
+        +addReservation(req, res) void
+        +updateReservation(req, res) void
+        +deleteReservation(req, res) void
+    }
+
+    class TableController {
+        +getTables(req, res, next) void
+        +getTable(req, res, next) void
+        +createTable(req, res, next) void
+        +updateTable(req, res, next) void
+        +deleteTable(req, res, next) void
+    }
+
+    %% Middleware
+    class AuthMiddleware {
+        +protect(req, res, next) void
+        +authorize(...roles) Function
+    }
+
+    %% Routes
+    class AuthRoutes {
+        +POST /register
+        +POST /login
+        +GET /logout
+        +GET /me
+    }
+
+    class RestaurantRoutes {
+        +GET /
+        +GET /:id
+        +POST /
+        +PUT /:id
+        +DELETE /:id
+        +USE /:restaurantId/reservations
+    }
+
+    class ReservationRoutes {
+        +GET /
+        +GET /:id
+        +POST /
+        +PUT /:id
+        +DELETE /:id
+    }
+
+    class TableRoutes {
+        +GET /
+        +GET /:id
+        +POST /
+        +PUT /:id
+        +DELETE /:id
+    }
+
+    %% Relationships - Models
+    User "1" --> "0..*" Reservation : makes
+    Restaurant "1" --> "0..*" Reservation : has
+    Restaurant "1" --> "0..*" Table : contains
+    Table "1" --> "0..*" Reservation : assigned to
+    
+    %% Relationships - Controllers to Models
+    AuthController ..> User : uses
+    RestaurantController ..> Restaurant : uses
+    RestaurantController ..> Reservation : uses
+    ReservationController ..> Reservation : uses
+    ReservationController ..> Restaurant : uses
+    TableController ..> Table : uses
+    TableController ..> Reservation : uses
+    
+    %% Relationships - Routes to Controllers
+    AuthRoutes ..> AuthController : calls
+    RestaurantRoutes ..> RestaurantController : calls
+    ReservationRoutes ..> ReservationController : calls
+    TableRoutes ..> TableController : calls
+    
+    %% Relationships - Middleware
+    AuthMiddleware ..> User : validates
+    RestaurantRoutes ..> AuthMiddleware : protected by
+    ReservationRoutes ..> AuthMiddleware : protected by
+    TableRoutes ..> AuthMiddleware : protected by
+
+    %% Enumerations
+    class UserRole {
+        <<enumeration>>
+        user
+        admin
+    }
+
+    class TableStatus {
+        <<enumeration>>
+        AVAILABLE
+        UNAVAILABLE
+    }
+
+    User --> UserRole : has
+    Table --> TableStatus : has
