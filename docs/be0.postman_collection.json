@@ -326,12 +326,9 @@
                 "exec": [
                   "// Generate random user info",
                   "const name = pm.variables.replaceIn('{{$randomFullName}}');",
-                  "const email = pm.variables.replaceIn('{{$randomEmail}}');",
-                  "",
-                  "// const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
-                  "const phone = pm.variables.replaceIn('{{$randomPhoneNumber}}');",
-                  "",
-                  "// const password = 'password123';",
+                  "const ts = Date.now();",
+                  "const email = 'user_' + ts + '@test.com';",
+                  "const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
                   "const password = 'password123';",
                   "",
                   "pm.environment.set('NAME-U', name);",
@@ -1267,12 +1264,9 @@
                 "exec": [
                   "// Generate random admin info",
                   "const name = pm.variables.replaceIn('{{$randomFullName}}');",
-                  "const email = pm.variables.replaceIn('{{$randomEmail}}');",
-                  "",
-                  "// const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
-                  "const phone = pm.variables.replaceIn('{{$randomPhoneNumber}}');",
-                  "",
-                  "// const password = 'password123';",
+                  "const ts = Date.now();",
+                  "const email = 'admin_' + ts + '@test.com';",
+                  "const phone = '09' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
                   "const password = 'password123';",
                   "",
                   "pm.environment.set('NAME-A', name);",
@@ -1440,6 +1434,16 @@
               "name": "Create Restaurant (Admin)",
               "event": [
                 {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "const ts = Date.now();",
+                      "pm.environment.set('NEW_RESTAURANT_NAME', 'Test Restaurant ' + ts);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
                   "listen": "test",
                   "script": {
                     "exec": [
@@ -1475,7 +1479,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Test Restaurant\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
+                  "raw": "{\n  \"name\": \"{{NEW_RESTAURANT_NAME}}\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
