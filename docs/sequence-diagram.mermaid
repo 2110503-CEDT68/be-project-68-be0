@@ -4,10 +4,10 @@ sequenceDiagram
     participant Ctrl as Controllers
     participant Mod as Models
     participant DB as MongoDB
-    
+
     Client->>API: HTTP Request
     API->>API: Sanitize Input & Rate Limit Check
-    
+
     alt Registration [POST /api/auth/register]
         API->>Ctrl: Auth: register(req, res)
         Ctrl->>Mod: Hash Password & Create User
@@ -17,7 +17,7 @@ sequenceDiagram
         Ctrl->>Ctrl: Generate JWT & Set Cookie
         Ctrl-->>API: User + Token
         API-->>Client: 201 Created
-        
+
     else Login [POST /api/auth/login]
         API->>Ctrl: Auth: login(req, res)
         Ctrl->>Mod: Find User by Email
@@ -27,16 +27,16 @@ sequenceDiagram
         Ctrl->>Ctrl: Compare Passwords & Gen JWT
         Ctrl-->>API: User + Token
         API-->>Client: 200 OK
-        
+
     else Get Restaurants [GET /api/restaurants]
         API->>Ctrl: Rest: getRestaurants(req, res)
         Ctrl->>Mod: findAllWithRelations()
-        Mod->>DB: Find Restaurants, Tables, Reservations
+        Mod->>DB: Find Restaurants & Reservations
         DB-->>Mod: Documents
         Mod-->>Ctrl: Restaurants with Relations
         Ctrl-->>API: Return Data
         API-->>Client: 200 OK + Restaurants
-        
+
     else Create Restaurant (Admin) [POST /api/restaurants]
         API->>API: AuthMW: Verify JWT & Authorize('admin')
         API->>Ctrl: Rest: createRestaurant(req, res)
@@ -46,7 +46,7 @@ sequenceDiagram
         Mod-->>Ctrl: Restaurant Data
         Ctrl-->>API: Return Data
         API-->>Client: 201 Created
-        
+
     else Create Reservation [POST /api/.../reservations]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: addReservation(req, res)
@@ -60,7 +60,7 @@ sequenceDiagram
         Mod-->>Ctrl: Reservation Data
         Ctrl-->>API: Return Data
         API-->>Client: 201 Created
-        
+
     else Get User's Reservations [GET /api/reservations]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: getReservations(req, res)
@@ -70,17 +70,7 @@ sequenceDiagram
         Mod-->>Ctrl: User's Reservations
         Ctrl-->>API: Return Data
         API-->>Client: 200 OK + Reservations
-        
-    else Update Table (Admin) [PUT /api/tables/:id]
-        API->>API: AuthMW: Verify JWT & Authorize('admin')
-        API->>Ctrl: Table: updateTable(req, res)
-        Ctrl->>Mod: update(id, data)
-        Mod->>DB: Update Table Document
-        DB-->>Mod: Updated Table
-        Mod-->>Ctrl: Table Data
-        Ctrl-->>API: Return Data
-        API-->>Client: 200 OK
-        
+
     else Delete Reservation [DELETE /api/reservations/:id]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: deleteReservation(req, res)

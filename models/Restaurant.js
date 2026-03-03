@@ -1,49 +1,44 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const RestaurantSchema = new mongoose.Schema({
+const RestaurantSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'Please add a name'],
-        unique: true,
-        trim: true,
-        maxlength: [50, 'Name cannot be more than 50 characters']
+      type: String,
+      required: [true, "Please add a name"],
+      unique: true,
+      trim: true,
+      maxlength: [50, "Name cannot be more than 50 characters"],
     },
     address: {
-        type: String,
-        required: [true, 'Please add an address']
+      type: String,
+      required: [true, "Please add an address"],
     },
     telephone_number: {
-        type: String
+      type: String,
     },
     open_time: {
-        type: Date
+      type: Date,
     },
     close_time: {
-        type: Date
+      type: Date,
     },
     createdAt: {
-        type: Date,
-        default: Date.now
-    }
-}, {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true}
-});
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
 
 // Virtual populate reservations
-RestaurantSchema.virtual('reservations', {
-    ref: 'Reservation',
-    localField: '_id',
-    foreignField: 'restaurant_id',
-    justOne: false
+RestaurantSchema.virtual("reservations", {
+  ref: "Reservation",
+  localField: "_id",
+  foreignField: "restaurant_id",
+  justOne: false,
 });
 
-// Virtual populate tables
-RestaurantSchema.virtual('tables', {
-    ref: 'Table',
-    localField: '_id',
-    foreignField: 'restaurant_id',
-    justOne: false
-});
-
-export default mongoose.model('Restaurant', RestaurantSchema);
+export default mongoose.model("Restaurant", RestaurantSchema);

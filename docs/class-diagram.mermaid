@@ -21,15 +21,6 @@ classDiagram
         -Date close_time
         -Date createdAt
         +reservations virtual
-        +tables virtual
-    }
-
-    class Table {
-        -ObjectId _id
-        -ObjectId restaurant_id
-        -Number capacity
-        -String status
-        -Date createdAt
     }
 
     class Reservation {
@@ -39,7 +30,6 @@ classDiagram
         -String restaurant_name
         -Date reservation_date
         -Number quantity
-        -ObjectId table
         -Date createdAt
     }
 
@@ -66,14 +56,6 @@ classDiagram
         +addReservation(req, res) void
         +updateReservation(req, res) void
         +deleteReservation(req, res) void
-    }
-
-    class TableController {
-        +getTables(req, res, next) void
-        +getTable(req, res, next) void
-        +createTable(req, res, next) void
-        +updateTable(req, res, next) void
-        +deleteTable(req, res, next) void
     }
 
     %% Middleware
@@ -107,40 +89,26 @@ classDiagram
         +DELETE /:id
     }
 
-    class TableRoutes {
-        +GET /
-        +GET /:id
-        +POST /
-        +PUT /:id
-        +DELETE /:id
-    }
-
     %% Relationships - Models
     User "1" --> "0..*" Reservation : makes
     Restaurant "1" --> "0..*" Reservation : has
-    Restaurant "1" --> "0..*" Table : contains
-    Table "1" --> "0..*" Reservation : assigned to
-    
+
     %% Relationships - Controllers to Models
     AuthController ..> User : uses
     RestaurantController ..> Restaurant : uses
     RestaurantController ..> Reservation : uses
     ReservationController ..> Reservation : uses
     ReservationController ..> Restaurant : uses
-    TableController ..> Table : uses
-    TableController ..> Reservation : uses
-    
+
     %% Relationships - Routes to Controllers
     AuthRoutes ..> AuthController : calls
     RestaurantRoutes ..> RestaurantController : calls
     ReservationRoutes ..> ReservationController : calls
-    TableRoutes ..> TableController : calls
-    
+
     %% Relationships - Middleware
     AuthMiddleware ..> User : validates
     RestaurantRoutes ..> AuthMiddleware : protected by
     ReservationRoutes ..> AuthMiddleware : protected by
-    TableRoutes ..> AuthMiddleware : protected by
 
     %% Enumerations
     class UserRole {
@@ -149,11 +117,4 @@ classDiagram
         admin
     }
 
-    class TableStatus {
-        <<enumeration>>
-        AVAILABLE
-        UNAVAILABLE
-    }
-
     User --> UserRole : has
-    Table --> TableStatus : has

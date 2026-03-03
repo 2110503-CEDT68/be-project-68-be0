@@ -1,0 +1,2083 @@
+{
+  "info": {
+    "_postman_id": "6507a379-657e-4010-b33e-e684372799b7",
+    "name": "be0_demo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48219434"
+  },
+  "item": [
+    {
+      "name": "No Login",
+      "item": [
+        {
+          "name": "Restaurant",
+          "item": [
+            {
+              "name": "Get All Restaurants",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "const res = pm.response.json();",
+                      "if (res.data && res.data.length > 0) pm.environment.set('RESTAURANT_ID', res.data[0]._id);",
+                      "pm.execution.setNextRequest('Get Single Restaurant (No Login)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Restaurant (No Login)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.execution.setNextRequest('Create Restaurant (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Restaurant (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Update Restaurant (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test Restaurant\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Restaurant (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Delete Restaurant (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Restaurant Name\",\n  \"address\": \"456 Updated Street\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Restaurant (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Get All Reservations (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reservation",
+          "item": [
+            {
+              "name": "Get All Reservations (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Get Single Reservation (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Reservation (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Create Reservation (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Reservation (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Update Reservation (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"2026-06-01T12:00:00Z\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Reservation (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Delete Reservation (No Login - 401)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantity\": 3\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Reservation (No Login - 401)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401 - not authorized', function() { pm.response.to.have.status(401); });",
+                      "pm.execution.setNextRequest('Register User');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate random user info",
+                  "const name = pm.variables.replaceIn('{{$randomFullName}}');",
+                  "const email = pm.variables.replaceIn('{{$randomEmail}}');",
+                  "",
+                  "// const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
+                  "const phone = pm.variables.replaceIn('{{$randomPhoneNumber}}');",
+                  "",
+                  "// const password = 'password123';",
+                  "const password = 'password123';",
+                  "",
+                  "pm.environment.set('NAME-U', name);",
+                  "pm.environment.set('EMAIL-U', email);",
+                  "pm.environment.set('PHONE-U', phone);",
+                  "pm.environment.set('PASSWORD-U', password);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Response has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-U', res.token);",
+                  "});",
+                  "pm.execution.setNextRequest('Register User - Missing Email');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{NAME-U}}\",\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"{{PASSWORD-U}}\",\n  \"telephone_number\": \"{{PHONE-U}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User - Missing Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 - missing email', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Should fail without email', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});",
+                  "pm.execution.setNextRequest('Register User - Duplicate Email');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"password\": \"password123\",\n  \"telephone_number\": \"0800000001\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User - Duplicate Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 - duplicate email', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Should fail with duplicate email', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});",
+                  "pm.execution.setNextRequest('Login User');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"password123\",\n  \"telephone_number\": \"0800000002\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Response has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-U', res.token);",
+                  "});",
+                  "pm.execution.setNextRequest('Login User - Wrong Password');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"{{PASSWORD-U}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User - Wrong Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 - wrong password', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Should fail with wrong password', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});",
+                  "pm.execution.setNextRequest('Get Me (User)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me (User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('User role is user', function() {",
+                  "  pm.expect(pm.response.json().data.role).to.eql('user');",
+                  "});",
+                  "pm.execution.setNextRequest('Get All Restaurants (User)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN-U}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/me",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaurant",
+          "item": [
+            {
+              "name": "Get All Restaurants (User)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "const res = pm.response.json();",
+                      "if (res.data && res.data.length > 0) pm.environment.set('RESTAURANT_ID', res.data[0]._id);",
+                      "pm.execution.setNextRequest('Get Single Restaurant (User)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Restaurant (User)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.execution.setNextRequest('Create Restaurant (User - 403)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Restaurant (User - 403)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 403 - user cannot create restaurant', function() { pm.response.to.have.status(403); });",
+                      "pm.execution.setNextRequest('Update Restaurant (User - 403)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test Restaurant\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Restaurant (User - 403)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 403 - user cannot update restaurant', function() { pm.response.to.have.status(403); });",
+                      "pm.execution.setNextRequest('Delete Restaurant (User - 403)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Restaurant Name\",\n  \"address\": \"456 Updated Street\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Restaurant (User - 403)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 403 - user cannot delete restaurant', function() { pm.response.to.have.status(403); });",
+                      "pm.execution.setNextRequest('Create Reservation');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reservation",
+          "item": [
+            {
+              "name": "Create Reservation",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "// Set reservation date 3 days from now at noon",
+                      "const future = new Date();",
+                      "future.setDate(future.getDate() + 3);",
+                      "future.setHours(12, 0, 0, 0);",
+                      "pm.environment.set('RESERVATION_DATE', future.toISOString());"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                      "pm.test('Reservation created', function() {",
+                      "  const res = pm.response.json();",
+                      "  pm.expect(res.success).to.be.true;",
+                      "  pm.environment.set('RESERVATION_ID', res.data._id);",
+                      "});",
+                      "pm.execution.setNextRequest('Create Reservation - No Date');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{RESERVATION_DATE}}\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Reservation - No Date",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 400 - missing date', function() { pm.response.to.have.status(400); });",
+                      "pm.test('Should fail without date', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.false;",
+                      "});",
+                      "pm.execution.setNextRequest('Create Reservation - Past Date');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Reservation - Past Date",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 400 - past date', function() { pm.response.to.have.status(400); });",
+                      "pm.test('Should fail with past date', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.false;",
+                      "});",
+                      "pm.execution.setNextRequest('Create Reservation - Duplicate Same Day');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"2020-01-01T12:00:00Z\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Reservation - Duplicate Same Day",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 400 - duplicate', function() { pm.response.to.have.status(400); });",
+                      "pm.test('Should fail with duplicate reservation on same day', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.false;",
+                      "});",
+                      "pm.execution.setNextRequest('Create Reservation - Invalid Restaurant');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{RESERVATION_DATE}}\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Reservation - Invalid Restaurant",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 404 - restaurant not found', function() { pm.response.to.have.status(404); });",
+                      "pm.test('Should fail with invalid restaurant', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.false;",
+                      "});",
+                      "pm.execution.setNextRequest('Get All My Reservations');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{RESERVATION_DATE}}\",\n  \"quantity\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/000000000000000000000000/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "000000000000000000000000",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All My Reservations",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Only own reservations', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Get Single Reservation (User)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Reservation (User)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.execution.setNextRequest('Update Reservation (User)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Reservation (User)",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "// Set updated date 5 days from now at 2pm",
+                      "const future = new Date();",
+                      "future.setDate(future.getDate() + 5);",
+                      "future.setHours(14, 0, 0, 0);",
+                      "pm.environment.set('UPDATED_DATE', future.toISOString());"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Reservation updated', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Delete Reservation (User)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{UPDATED_DATE}}\",\n  \"quantity\": 3\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Reservation (User)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Reservation deleted', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Logout User');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-U}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Logout User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.environment.unset('TOKEN-U');",
+                  "pm.execution.setNextRequest('Register Admin');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN-U}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/logout",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Register Admin",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate random admin info",
+                  "const name = pm.variables.replaceIn('{{$randomFullName}}');",
+                  "const email = pm.variables.replaceIn('{{$randomEmail}}');",
+                  "",
+                  "// const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
+                  "const phone = pm.variables.replaceIn('{{$randomPhoneNumber}}');",
+                  "",
+                  "// const password = 'password123';",
+                  "const password = 'password123';",
+                  "",
+                  "pm.environment.set('NAME-A', name);",
+                  "pm.environment.set('EMAIL-A', email);",
+                  "pm.environment.set('PHONE-A', phone);",
+                  "pm.environment.set('PASSWORD-A', password);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Response has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-A', res.token);",
+                  "});",
+                  "pm.execution.setNextRequest('Login Admin');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{NAME-A}}\",\n  \"email\": \"{{EMAIL-A}}\",\n  \"password\": \"{{PASSWORD-A}}\",\n  \"telephone_number\": \"{{PHONE-A}}\",\n  \"adminSecret\": \"{{ADMIN_SECRET}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-A', res.token);",
+                  "});",
+                  "pm.execution.setNextRequest('Get Me (Admin)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-A}}\",\n  \"password\": \"{{PASSWORD-A}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Role is admin', function() {",
+                  "  pm.expect(pm.response.json().data.role).to.eql('admin');",
+                  "});",
+                  "pm.execution.setNextRequest('Get All Restaurants (Admin)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN-A}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/me",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaurant",
+          "item": [
+            {
+              "name": "Get All Restaurants (Admin)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "const res = pm.response.json();",
+                      "if (res.data && res.data.length > 0) pm.environment.set('RESTAURANT_ID', res.data[0]._id);",
+                      "pm.execution.setNextRequest('Create Restaurant (Admin)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Restaurant (Admin)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                      "pm.test('Restaurant created', function() {",
+                      "  const res = pm.response.json();",
+                      "  pm.expect(res.success).to.be.true;",
+                      "  pm.environment.set('NEW_RESTAURANT_ID', res.data._id);",
+                      "});",
+                      "pm.execution.setNextRequest('Update Restaurant (Admin)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test Restaurant\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Restaurant (Admin)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Restaurant updated', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Delete Restaurant (Admin)');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Restaurant Name\",\n  \"address\": \"456 Updated Street\"\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{NEW_RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{NEW_RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Restaurant (Admin)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Restaurant deleted', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Admin Get All Reservations');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{NEW_RESTAURANT_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{NEW_RESTAURANT_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reservation",
+          "item": [
+            {
+              "name": "Admin Get All Reservations",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "const res = pm.response.json();",
+                      "if (res.data && res.data.length > 0) pm.environment.set('ADMIN_RESERVATION_ID', res.data[0]._id);",
+                      "pm.execution.setNextRequest('Admin Create Reservation');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Create Reservation",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "// Set reservation date 10 days from now at 10am",
+                      "const future = new Date();",
+                      "future.setDate(future.getDate() + 10);",
+                      "future.setHours(10, 0, 0, 0);",
+                      "pm.environment.set('ADMIN_RESERVATION_DATE', future.toISOString());"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                      "pm.test('Admin created reservation', function() {",
+                      "  const res = pm.response.json();",
+                      "  pm.expect(res.success).to.be.true;",
+                      "  pm.environment.set('ADMIN_RESERVATION_ID', res.data._id);",
+                      "});",
+                      "pm.execution.setNextRequest('Admin Get Single Reservation');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{ADMIN_RESERVATION_DATE}}\",\n  \"quantity\": 4\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "restaurants",
+                    "{{RESTAURANT_ID}}",
+                    "reservations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Get Single Reservation",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.execution.setNextRequest('Admin Update Reservation');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{ADMIN_RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Update Reservation",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "// Set admin updated date 7 days from now at 10am",
+                      "const future = new Date();",
+                      "future.setDate(future.getDate() + 7);",
+                      "future.setHours(10, 0, 0, 0);",
+                      "pm.environment.set('ADMIN_UPDATED_DATE', future.toISOString());"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Admin updated reservation', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Admin Delete Reservation');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reservation_date\": \"{{ADMIN_UPDATED_DATE}}\",\n  \"quantity\": 4\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{ADMIN_RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Delete Reservation",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                      "pm.test('Admin deleted reservation', function() {",
+                      "  pm.expect(pm.response.json().success).to.be.true;",
+                      "});",
+                      "pm.execution.setNextRequest('Logout Admin');"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN-A}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reservations",
+                    "{{ADMIN_RESERVATION_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Logout Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.environment.unset('TOKEN-A');",
+                  "pm.execution.setNextRequest(null);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN-A}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/logout",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
