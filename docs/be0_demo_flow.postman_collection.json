@@ -299,7 +299,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -308,7 +310,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -334,7 +341,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -343,7 +352,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -370,7 +384,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -379,7 +395,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -392,8 +413,9 @@
               "script": {
                 "exec": [
                   "// Set time outside open hours (02:00 UTC - before 08:00 open)",
+                  "// Use day +4 (different day from RESERVATION_DATE) to avoid duplicate check",
                   "const future = new Date();",
-                  "future.setDate(future.getDate() + 3);",
+                  "future.setDate(future.getDate() + 4);",
                   "future.setUTCHours(2, 0, 0, 0);",
                   "pm.environment.set('OUTSIDE_HOURS_DATE', future.toISOString());"
                 ],
@@ -419,7 +441,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -428,7 +452,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -455,7 +484,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -464,7 +495,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -497,7 +533,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations",
@@ -530,7 +568,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
@@ -581,7 +621,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -622,7 +664,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
@@ -658,7 +702,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-U}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/auth/logout",
@@ -673,6 +719,57 @@
     {
       "name": "9 Admin Log-in",
       "item": [
+        {
+          "name": "Register Admin",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const name = pm.variables.replaceIn('{{$randomFullName}}');",
+                  "const ts = Date.now();",
+                  "const email = 'admin_' + ts + '@test.com';",
+                  "const phone = '09' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
+                  "const password = 'password123';",
+                  "pm.environment.set('NAME-A', name);",
+                  "pm.environment.set('EMAIL-A', email);",
+                  "pm.environment.set('PHONE-A', phone);",
+                  "pm.environment.set('PASSWORD-A', password);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Admin registered', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-A', res.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{NAME-A}}\",\n  \"email\": \"{{EMAIL-A}}\",\n  \"password\": \"{{PASSWORD-A}}\",\n  \"telephone_number\": \"{{PHONE-A}}\",\n  \"adminSecret\": \"{{ADMIN_SECRET}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Login Admin",
           "event": [
@@ -748,7 +845,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-A}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -757,7 +856,12 @@
             "url": {
               "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
               "host": ["{{URL}}"],
-              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+              "path": [
+                "api",
+                "restaurants",
+                "{{RESTAURANT_ID}}",
+                "reservations"
+              ]
             }
           },
           "response": []
@@ -785,7 +889,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-A}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations",
@@ -818,7 +924,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-A}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
@@ -869,7 +977,9 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-A}}", "type": "string" }
+              ]
             },
             "body": {
               "mode": "raw",
@@ -910,7 +1020,9 @@
             "header": [],
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+              "bearer": [
+                { "key": "token", "value": "{{TOKEN-A}}", "type": "string" }
+              ]
             },
             "url": {
               "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
