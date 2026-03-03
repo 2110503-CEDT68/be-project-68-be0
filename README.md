@@ -7,6 +7,84 @@
 ![System Architecture](docs/system-overview.png)
 
 <details>
+<summary><strong>Click to view use-case diagram</strong></summary>
+
+```mermaid
+%%{init: {'theme': 'default', 'themeVariables': { 'useMaxWidth': false }}}%%
+flowchart LR
+    Guest(["Guest"])
+    User(["User"])
+    Admin(["Admin"])
+
+    subgraph System ["Restaurant Reservation System"]
+
+        subgraph Auth ["Authentication"]
+            UC1["Register Account"]
+            UC2["Login"]
+            UC3["Logout"]
+            UC4["View My Profile"]
+        end
+
+        subgraph Restaurants ["Restaurant Management"]
+            UC5["Browse All Restaurants"]
+            UC6["View Restaurant Details"]
+            UC7["Create Restaurant"]
+            UC8["Update Restaurant"]
+            UC9["Delete Restaurant"]
+        end
+
+        subgraph Reservations ["Reservation Management"]
+            UC10["Make Reservation"]
+            UC11["View My Reservations"]
+            UC12["View Single Reservation"]
+            UC13["Update Reservation"]
+            UC14["Cancel Reservation"]
+            UC15["View All Reservations (Admin)"]
+        end
+
+    end
+
+    %% Guest
+    Guest --> UC1
+    Guest --> UC2
+    Guest --> UC5
+    Guest --> UC6
+
+    %% User
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
+    User --> UC10
+    User --> UC11
+    User --> UC12
+    User --> UC13
+    User --> UC14
+
+    %% Admin
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11
+    Admin --> UC12
+    Admin --> UC13
+    Admin --> UC14
+    Admin --> UC15
+```
+
+*The diagram shows all actors (Guest, User, Admin) and their respective use cases within the system.*
+
+</details>
+
+<details>
 <summary><strong> Click to view detailed sequence diagram</strong></summary>
 
 ```mermaid
