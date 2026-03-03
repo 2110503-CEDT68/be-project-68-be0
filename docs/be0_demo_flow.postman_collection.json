@@ -1,0 +1,926 @@
+{
+  "info": {
+    "_postman_id": "be0-demo-flow-collection",
+    "name": "be0 Demo Flow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1 User Registration + Validation Check",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const name = pm.variables.replaceIn('{{$randomFullName}}');",
+                  "const ts = Date.now();",
+                  "const email = 'user_' + ts + '@test.com';",
+                  "const phone = '08' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');",
+                  "const password = 'password123';",
+                  "pm.environment.set('NAME-U', name);",
+                  "pm.environment.set('EMAIL-U', email);",
+                  "pm.environment.set('PHONE-U', phone);",
+                  "pm.environment.set('PASSWORD-U', password);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Register success - has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-U', res.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{NAME-U}}\",\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"{{PASSWORD-U}}\",\n  \"telephone_number\": \"{{PHONE-U}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User - Missing Email (Validation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Validation - reject missing email', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"password\": \"password123\",\n  \"telephone_number\": \"0812345678\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User - Duplicate Email (Validation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Validation - reject duplicate email', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{NAME-U}}\",\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"{{PASSWORD-U}}\",\n  \"telephone_number\": \"{{PHONE-U}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/register",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2 User Log-in",
+      "item": [
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Login success - has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-U', res.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"{{PASSWORD-U}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User - Wrong Password (Validation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Validation - reject wrong password', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-U}}\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3 User View Product (Restaurants)",
+      "item": [
+        {
+          "name": "Get All Restaurants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('View restaurants success', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "  if (res.data.length > 0) {",
+                  "    pm.environment.set('RESTAURANT_ID', res.data[0]._id);",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/api/restaurants",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('View single restaurant success', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4 User Create Booking + Check Create Condition",
+      "item": [
+        {
+          "name": "Create Reservation",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set reservation date 3 days from now at 12:00 UTC (within open hours)",
+                  "const future = new Date();",
+                  "future.setDate(future.getDate() + 3);",
+                  "future.setUTCHours(12, 0, 0, 0);",
+                  "pm.environment.set('RESERVATION_DATE', future.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Reservation created', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data._id).to.exist;",
+                  "  pm.environment.set('RESERVATION_ID', res.data._id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{RESERVATION_DATE}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reservation - No Date (Condition Check)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Condition - reject missing date', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reservation - Past Date (Condition Check)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Condition - reject past date', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "  pm.expect(pm.response.json().message).to.match(/future/i);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"2020-01-01T12:00:00Z\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reservation - Outside Open Hours (Condition Check)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set time outside open hours (02:00 UTC - before 08:00 open)",
+                  "const future = new Date();",
+                  "future.setDate(future.getDate() + 3);",
+                  "future.setUTCHours(2, 0, 0, 0);",
+                  "pm.environment.set('OUTSIDE_HOURS_DATE', future.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Condition - reject outside open hours', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "  pm.expect(pm.response.json().message).to.match(/open from/i);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{OUTSIDE_HOURS_DATE}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reservation - Duplicate Same Day (Condition Check)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function() { pm.response.to.have.status(400); });",
+                  "pm.test('Condition - reject duplicate same day', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.false;",
+                  "  pm.expect(pm.response.json().message).to.match(/already have a reservation/i);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{RESERVATION_DATE}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5 User View Own Booking",
+      "item": [
+        {
+          "name": "Get All My Reservations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('View own reservations success', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Reservation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('View single reservation success', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data._id).to.equal(pm.environment.get('RESERVATION_ID'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6 User Edit Own Booking",
+      "item": [
+        {
+          "name": "Update Reservation",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set updated date 5 days from now at 14:00 UTC",
+                  "const future = new Date();",
+                  "future.setDate(future.getDate() + 5);",
+                  "future.setUTCHours(14, 0, 0, 0);",
+                  "pm.environment.set('UPDATED_DATE', future.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Reservation updated', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data.quantity).to.equal(3);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{UPDATED_DATE}}\",\n  \"quantity\": 3\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7 User Delete Own Booking",
+      "item": [
+        {
+          "name": "Delete Reservation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Reservation deleted', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8 User Log-out",
+      "item": [
+        {
+          "name": "Logout User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Logout success', function() {",
+                  "  pm.expect(pm.response.json().success).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-U}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/logout",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "9 Admin Log-in",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin login success - has token', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.token).to.exist;",
+                  "  pm.environment.set('TOKEN-A', res.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{EMAIL-A}}\",\n  \"password\": \"{{PASSWORD-A}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/auth/login",
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 Admin View Any Booking",
+      "item": [
+        {
+          "name": "Admin Create Reservation (Setup)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set reservation date 10 days from now at 10:00 UTC",
+                  "const future = new Date();",
+                  "future.setDate(future.getDate() + 10);",
+                  "future.setUTCHours(10, 0, 0, 0);",
+                  "pm.environment.set('ADMIN_RESERVATION_DATE', future.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function() { pm.response.to.have.status(201); });",
+                  "pm.test('Admin reservation created', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.environment.set('ADMIN_RESERVATION_ID', res.data._id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{ADMIN_RESERVATION_DATE}}\",\n  \"quantity\": 4\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "restaurants", "{{RESTAURANT_ID}}", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Get All Reservations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin can view all reservations', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Get Single Reservation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin can view any single reservation', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data._id).to.equal(pm.environment.get('ADMIN_RESERVATION_ID'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11 Admin Edit Any Booking",
+      "item": [
+        {
+          "name": "Admin Update Reservation",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set updated date 7 days from now at 10:00 UTC",
+                  "const future = new Date();",
+                  "future.setDate(future.getDate() + 7);",
+                  "future.setUTCHours(10, 0, 0, 0);",
+                  "pm.environment.set('ADMIN_UPDATED_DATE', future.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin updated reservation', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "  pm.expect(res.data.quantity).to.equal(5);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservation_date\": \"{{ADMIN_UPDATED_DATE}}\",\n  \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "12 Admin Delete Any Booking",
+      "item": [
+        {
+          "name": "Admin Delete Reservation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function() { pm.response.to.have.status(200); });",
+                  "pm.test('Admin deleted reservation', function() {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{TOKEN-A}}", "type": "string" }]
+            },
+            "url": {
+              "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
+              "host": ["{{URL}}"],
+              "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
