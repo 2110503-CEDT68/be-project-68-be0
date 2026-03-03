@@ -106,19 +106,15 @@ export const addReservation = async (req, res) => {
       const resTotalMinutes =
         resDate.getUTCHours() * 60 + resDate.getUTCMinutes();
 
-      const openTime = new Date(restaurant.open_time);
-      const closeTime = new Date(restaurant.close_time);
-      const openMinutes =
-        openTime.getUTCHours() * 60 + openTime.getUTCMinutes();
-      const closeMinutes =
-        closeTime.getUTCHours() * 60 + closeTime.getUTCMinutes();
+      const [openHH, openMM] = restaurant.open_time.split(":").map(Number);
+      const [closeHH, closeMM] = restaurant.close_time.split(":").map(Number);
+      const openMinutes = openHH * 60 + openMM;
+      const closeMinutes = closeHH * 60 + closeMM;
 
       if (resTotalMinutes < openMinutes || resTotalMinutes > closeMinutes) {
-        const openStr = `${String(openTime.getUTCHours()).padStart(2, "0")}:${String(openTime.getUTCMinutes()).padStart(2, "0")}`;
-        const closeStr = `${String(closeTime.getUTCHours()).padStart(2, "0")}:${String(closeTime.getUTCMinutes()).padStart(2, "0")}`;
         return res.status(400).json({
           success: false,
-          message: `Restaurant is open from ${openStr} to ${closeStr}`,
+          message: `Restaurant is open from ${restaurant.open_time} to ${restaurant.close_time}`,
         });
       }
     }
@@ -209,19 +205,16 @@ export const updateReservation = async (req, res) => {
       if (restaurant && restaurant.open_time && restaurant.close_time) {
         const resTotalMinutes =
           resDate.getUTCHours() * 60 + resDate.getUTCMinutes();
-        const openTime = new Date(restaurant.open_time);
-        const closeTime = new Date(restaurant.close_time);
-        const openMinutes =
-          openTime.getUTCHours() * 60 + openTime.getUTCMinutes();
-        const closeMinutes =
-          closeTime.getUTCHours() * 60 + closeTime.getUTCMinutes();
+
+        const [openHH, openMM] = restaurant.open_time.split(":").map(Number);
+        const [closeHH, closeMM] = restaurant.close_time.split(":").map(Number);
+        const openMinutes = openHH * 60 + openMM;
+        const closeMinutes = closeHH * 60 + closeMM;
 
         if (resTotalMinutes < openMinutes || resTotalMinutes > closeMinutes) {
-          const openStr = `${String(openTime.getUTCHours()).padStart(2, "0")}:${String(openTime.getUTCMinutes()).padStart(2, "0")}`;
-          const closeStr = `${String(closeTime.getUTCHours()).padStart(2, "0")}:${String(closeTime.getUTCMinutes()).padStart(2, "0")}`;
           return res.status(400).json({
             success: false,
-            message: `Restaurant is open from ${openStr} to ${closeStr}`,
+            message: `Restaurant is open from ${restaurant.open_time} to ${restaurant.close_time}`,
           });
         }
       }

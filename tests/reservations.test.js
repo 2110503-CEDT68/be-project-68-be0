@@ -40,8 +40,8 @@ const mockRestaurantInstance = {
   _id: "64a1b2c3d4e5f6a7b8c9d0e2",
   name: "Test Restaurant",
   address: "123 Test St",
-  open_time: new Date("2026-01-01T08:00:00Z"), // 08:00 UTC
-  close_time: new Date("2026-01-01T20:00:00Z"), // 20:00 UTC
+  open_time: "08:00",
+  close_time: "20:00",
 };
 
 const mockRestaurantModel = {

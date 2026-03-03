@@ -17,10 +17,18 @@ const RestaurantSchema = new mongoose.Schema(
       type: String,
     },
     open_time: {
-      type: Date,
+      type: String,
+      match: [
+        /^([01]\d|2[0-3]):([0-5]\d)$/,
+        "Please add a valid open_time in HH:MM format",
+      ],
     },
     close_time: {
-      type: Date,
+      type: String,
+      match: [
+        /^([01]\d|2[0-3]):([0-5]\d)$/,
+        "Please add a valid close_time in HH:MM format",
+      ],
     },
     createdAt: {
       type: Date,

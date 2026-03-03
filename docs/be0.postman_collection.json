@@ -1479,7 +1479,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"{{NEW_RESTAURANT_NAME}}\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"2026-01-01T08:00:00Z\",\n  \"close_time\": \"2026-01-01T20:00:00Z\"\n}"
+                  "raw": "{\n  \"name\": \"{{NEW_RESTAURANT_NAME}}\",\n  \"address\": \"123 Test Street\",\n  \"telephone_number\": \"021234567\",\n  \"open_time\": \"08:00\",\n  \"close_time\": \"20:00\"\n}"
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
