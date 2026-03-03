@@ -413,9 +413,10 @@
               "script": {
                 "exec": [
                   "// Set time outside open hours (02:00 UTC - before 08:00 open)",
-                  "// Use day +4 (different day from RESERVATION_DATE) to avoid duplicate check",
+                  "// Use random day 50-200 days ahead to avoid duplicate same-day check on re-run",
+                  "const randomDays = 50 + Math.floor(Math.random() * 150);",
                   "const future = new Date();",
-                  "future.setDate(future.getDate() + 4);",
+                  "future.setDate(future.getDate() + randomDays);",
                   "future.setUTCHours(2, 0, 0, 0);",
                   "pm.environment.set('OUTSIDE_HOURS_DATE', future.toISOString());"
                 ],
