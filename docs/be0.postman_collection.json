@@ -33,13 +33,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -63,14 +58,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -103,13 +92,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -142,14 +126,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -173,14 +151,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -209,13 +181,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations"]
                 }
               },
               "response": []
@@ -239,14 +206,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -279,9 +240,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -320,14 +279,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -351,14 +304,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -425,14 +372,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/register",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -468,14 +409,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/register",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -511,14 +446,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/register",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -556,14 +485,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/login",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
             }
           },
           "response": []
@@ -599,14 +522,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/login",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
             }
           },
           "response": []
@@ -643,14 +560,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/me",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "me"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "me"]
             }
           },
           "response": []
@@ -689,13 +600,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -729,14 +635,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -779,13 +679,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -828,14 +723,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -869,14 +758,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -893,10 +776,10 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// Set reservation date 3 days from now at noon",
+                      "// Set reservation date 3 days from now at noon (UTC)",
                       "const future = new Date();",
                       "future.setDate(future.getDate() + 3);",
-                      "future.setHours(12, 0, 0, 0);",
+                      "future.setUTCHours(12, 0, 0, 0);",
                       "pm.environment.set('RESERVATION_DATE', future.toISOString());"
                     ],
                     "type": "text/javascript"
@@ -942,9 +825,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -996,9 +877,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -1050,9 +929,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -1104,9 +981,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -1158,9 +1033,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/000000000000000000000000/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -1203,13 +1076,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations"]
                 }
               },
               "response": []
@@ -1243,14 +1111,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -1262,10 +1124,10 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// Set updated date 5 days from now at 2pm",
+                      "// Set updated date 5 days from now at 2pm (UTC)",
                       "const future = new Date();",
                       "future.setDate(future.getDate() + 5);",
-                      "future.setHours(14, 0, 0, 0);",
+                      "future.setUTCHours(14, 0, 0, 0);",
                       "pm.environment.set('UPDATED_DATE', future.toISOString());"
                     ],
                     "type": "text/javascript"
@@ -1309,14 +1171,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -1353,14 +1209,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -1397,14 +1247,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/logout",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "logout"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "logout"]
             }
           },
           "response": []
@@ -1469,14 +1313,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/register",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -1514,14 +1352,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/login",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "login"]
             }
           },
           "response": []
@@ -1558,14 +1390,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/me",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "me"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "me"]
             }
           },
           "response": []
@@ -1604,13 +1430,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -1658,13 +1479,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants"]
                 }
               },
               "response": []
@@ -1710,14 +1526,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{NEW_RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{NEW_RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{NEW_RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -1754,14 +1564,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{NEW_RESTAURANT_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "restaurants",
-                    "{{NEW_RESTAURANT_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "restaurants", "{{NEW_RESTAURANT_ID}}"]
                 }
               },
               "response": []
@@ -1802,13 +1606,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations"]
                 }
               },
               "response": []
@@ -1820,10 +1619,10 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// Set reservation date 10 days from now at 10am",
+                      "// Set reservation date 10 days from now at 10am (UTC)",
                       "const future = new Date();",
                       "future.setDate(future.getDate() + 10);",
-                      "future.setHours(10, 0, 0, 0);",
+                      "future.setUTCHours(10, 0, 0, 0);",
                       "pm.environment.set('ADMIN_RESERVATION_DATE', future.toISOString());"
                     ],
                     "type": "text/javascript"
@@ -1869,9 +1668,7 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/restaurants/{{RESTAURANT_ID}}/reservations",
-                  "host": [
-                    "{{URL}}"
-                  ],
+                  "host": ["{{URL}}"],
                   "path": [
                     "api",
                     "restaurants",
@@ -1911,14 +1708,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{ADMIN_RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -1930,10 +1721,10 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// Set admin updated date 7 days from now at 10am",
+                      "// Set admin updated date 7 days from now at 10am (UTC)",
                       "const future = new Date();",
                       "future.setDate(future.getDate() + 7);",
-                      "future.setHours(10, 0, 0, 0);",
+                      "future.setUTCHours(10, 0, 0, 0);",
                       "pm.environment.set('ADMIN_UPDATED_DATE', future.toISOString());"
                     ],
                     "type": "text/javascript"
@@ -1977,14 +1768,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{ADMIN_RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -2021,14 +1806,8 @@
                 },
                 "url": {
                   "raw": "{{URL}}/api/reservations/{{ADMIN_RESERVATION_ID}}",
-                  "host": [
-                    "{{URL}}"
-                  ],
-                  "path": [
-                    "api",
-                    "reservations",
-                    "{{ADMIN_RESERVATION_ID}}"
-                  ]
+                  "host": ["{{URL}}"],
+                  "path": ["api", "reservations", "{{ADMIN_RESERVATION_ID}}"]
                 }
               },
               "response": []
@@ -2065,14 +1844,8 @@
             },
             "url": {
               "raw": "{{URL}}/api/auth/logout",
-              "host": [
-                "{{URL}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "logout"
-              ]
+              "host": ["{{URL}}"],
+              "path": ["api", "auth", "logout"]
             }
           },
           "response": []

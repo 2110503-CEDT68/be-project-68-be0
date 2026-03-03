@@ -17,10 +17,10 @@ sequenceDiagram
     participant Ctrl as Controllers
     participant Mod as Models
     participant DB as MongoDB
-    
+
     Client->>API: HTTP Request
     API->>API: Sanitize Input & Rate Limit Check
-    
+
     alt Registration [POST /api/auth/register]
         API->>Ctrl: Auth: register(req, res)
         Ctrl->>Mod: Hash Password & Create User
@@ -30,7 +30,7 @@ sequenceDiagram
         Ctrl->>Ctrl: Generate JWT & Set Cookie
         Ctrl-->>API: User + Token
         API-->>Client: 201 Created
-        
+
     else Login [POST /api/auth/login]
         API->>Ctrl: Auth: login(req, res)
         Ctrl->>Mod: Find User by Email
@@ -40,16 +40,16 @@ sequenceDiagram
         Ctrl->>Ctrl: Compare Passwords & Gen JWT
         Ctrl-->>API: User + Token
         API-->>Client: 200 OK
-        
+
     else Get Restaurants [GET /api/restaurants]
         API->>Ctrl: Rest: getRestaurants(req, res)
         Ctrl->>Mod: findAllWithRelations()
-        Mod->>DB: Find Restaurants, Tables, Reservations
+        Mod->>DB: Find Restaurants & Reservations
         DB-->>Mod: Documents
         Mod-->>Ctrl: Restaurants with Relations
         Ctrl-->>API: Return Data
         API-->>Client: 200 OK + Restaurants
-        
+
     else Create Restaurant (Admin) [POST /api/restaurants]
         API->>API: AuthMW: Verify JWT & Authorize('admin')
         API->>Ctrl: Rest: createRestaurant(req, res)
@@ -59,7 +59,7 @@ sequenceDiagram
         Mod-->>Ctrl: Restaurant Data
         Ctrl-->>API: Return Data
         API-->>Client: 201 Created
-        
+
     else Create Reservation [POST /api/.../reservations]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: addReservation(req, res)
@@ -73,7 +73,7 @@ sequenceDiagram
         Mod-->>Ctrl: Reservation Data
         Ctrl-->>API: Return Data
         API-->>Client: 201 Created
-        
+
     else Get User's Reservations [GET /api/reservations]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: getReservations(req, res)
@@ -83,17 +83,7 @@ sequenceDiagram
         Mod-->>Ctrl: User's Reservations
         Ctrl-->>API: Return Data
         API-->>Client: 200 OK + Reservations
-        
-    else Update Table (Admin) [PUT /api/tables/:id]
-        API->>API: AuthMW: Verify JWT & Authorize('admin')
-        API->>Ctrl: Table: updateTable(req, res)
-        Ctrl->>Mod: update(id, data)
-        Mod->>DB: Update Table Document
-        DB-->>Mod: Updated Table
-        Mod-->>Ctrl: Table Data
-        Ctrl-->>API: Return Data
-        API-->>Client: 200 OK
-        
+
     else Delete Reservation [DELETE /api/reservations/:id]
         API->>API: AuthMW: Verify JWT
         API->>Ctrl: Resv: deleteReservation(req, res)
@@ -142,15 +132,6 @@ classDiagram
         -Date close_time
         -Date createdAt
         +reservations virtual
-        +tables virtual
-    }
-
-    class Table {
-        -ObjectId _id
-        -ObjectId restaurant_id
-        -Number capacity
-        -String status
-        -Date createdAt
     }
 
     class Reservation {
@@ -160,7 +141,6 @@ classDiagram
         -String restaurant_name
         -Date reservation_date
         -Number quantity
-        -ObjectId table
         -Date createdAt
     }
 
@@ -187,14 +167,6 @@ classDiagram
         +addReservation(req, res) void
         +updateReservation(req, res) void
         +deleteReservation(req, res) void
-    }
-
-    class TableController {
-        +getTables(req, res, next) void
-        +getTable(req, res, next) void
-        +createTable(req, res, next) void
-        +updateTable(req, res, next) void
-        +deleteTable(req, res, next) void
     }
 
     %% Middleware
@@ -228,40 +200,26 @@ classDiagram
         +DELETE /:id
     }
 
-    class TableRoutes {
-        +GET /
-        +GET /:id
-        +POST /
-        +PUT /:id
-        +DELETE /:id
-    }
-
     %% Relationships - Models
     User "1" --> "0..*" Reservation : makes
     Restaurant "1" --> "0..*" Reservation : has
-    Restaurant "1" --> "0..*" Table : contains
-    Table "1" --> "0..*" Reservation : assigned to
-    
+
     %% Relationships - Controllers to Models
     AuthController ..> User : uses
     RestaurantController ..> Restaurant : uses
     RestaurantController ..> Reservation : uses
     ReservationController ..> Reservation : uses
     ReservationController ..> Restaurant : uses
-    TableController ..> Table : uses
-    TableController ..> Reservation : uses
-    
+
     %% Relationships - Routes to Controllers
     AuthRoutes ..> AuthController : calls
     RestaurantRoutes ..> RestaurantController : calls
     ReservationRoutes ..> ReservationController : calls
-    TableRoutes ..> TableController : calls
-    
+
     %% Relationships - Middleware
     AuthMiddleware ..> User : validates
     RestaurantRoutes ..> AuthMiddleware : protected by
     ReservationRoutes ..> AuthMiddleware : protected by
-    TableRoutes ..> AuthMiddleware : protected by
 
     %% Enumerations
     class UserRole {
@@ -270,14 +228,7 @@ classDiagram
         admin
     }
 
-    class TableStatus {
-        <<enumeration>>
-        AVAILABLE
-        UNAVAILABLE
-    }
-
     User --> UserRole : has
-    Table --> TableStatus : has
 ```
 
 *The UML diagram shows the complete system architecture including models, controllers, routes, middleware, and their relationships.*
@@ -296,7 +247,7 @@ classDiagram
    ```bash
    cp .env.example .env
    ```
-   
+
    Update the `.env` file with your MongoDB connection string:
    ```
    PORT=3000

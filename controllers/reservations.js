@@ -40,24 +40,20 @@ export const getReservation = async (req, res) => {
       .populate("restaurant_id", "name address");
 
     if (!reservation) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `No reservation with the id of ${req.params.id}`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `No reservation with the id of ${req.params.id}`,
+      });
     }
 
     if (
       reservation.user._id.toString() !== req.user.id.toString() &&
       req.user.role !== "admin"
     ) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: `User ${req.user.id} is not authorized to view this reservation`,
-        });
+      return res.status(401).json({
+        success: false,
+        message: `User ${req.user.id} is not authorized to view this reservation`,
+      });
     }
 
     res.status(200).json({ success: true, data: reservation });
@@ -91,42 +87,39 @@ export const addReservation = async (req, res) => {
     }
 
     if (resDate <= new Date()) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Reservation date must be in the future",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Reservation date must be in the future",
+      });
     }
 
     const restaurant = await Restaurant.findById(restaurant_id);
 
     if (!restaurant) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `No restaurant with the id of ${restaurant_id}`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `No restaurant with the id of ${restaurant_id}`,
+      });
     }
 
     if (restaurant.open_time && restaurant.close_time) {
-      const resHours = resDate.getHours();
-      const resMinutes = resDate.getMinutes();
-      const resTotalMinutes = resHours * 60 + resMinutes;
+      const resTotalMinutes =
+        resDate.getUTCHours() * 60 + resDate.getUTCMinutes();
 
       const openTime = new Date(restaurant.open_time);
       const closeTime = new Date(restaurant.close_time);
-      const openMinutes = openTime.getHours() * 60 + openTime.getMinutes();
-      const closeMinutes = closeTime.getHours() * 60 + closeTime.getMinutes();
+      const openMinutes =
+        openTime.getUTCHours() * 60 + openTime.getUTCMinutes();
+      const closeMinutes =
+        closeTime.getUTCHours() * 60 + closeTime.getUTCMinutes();
 
       if (resTotalMinutes < openMinutes || resTotalMinutes > closeMinutes) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: `Restaurant is open from ${openTime.toTimeString().slice(0, 5)} to ${closeTime.toTimeString().slice(0, 5)}`,
-          });
+        const openStr = `${String(openTime.getUTCHours()).padStart(2, "0")}:${String(openTime.getUTCMinutes()).padStart(2, "0")}`;
+        const closeStr = `${String(closeTime.getUTCHours()).padStart(2, "0")}:${String(closeTime.getUTCMinutes()).padStart(2, "0")}`;
+        return res.status(400).json({
+          success: false,
+          message: `Restaurant is open from ${openStr} to ${closeStr}`,
+        });
       }
     }
 
@@ -134,19 +127,17 @@ export const addReservation = async (req, res) => {
     const existingReservations = await Reservation.find({ user: req.user.id });
 
     if (existingReservations.length >= 3 && req.user.role !== "admin") {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: `The user with ID ${req.user.id} has already made 3 reservations`,
-        });
+      return res.status(400).json({
+        success: false,
+        message: `The user with ID ${req.user.id} has already made 3 reservations`,
+      });
     }
 
     // Check duplicate reservation on same day at same restaurant
     const sameDayStart = new Date(resDate);
-    sameDayStart.setHours(0, 0, 0, 0);
+    sameDayStart.setUTCHours(0, 0, 0, 0);
     const sameDayEnd = new Date(resDate);
-    sameDayEnd.setHours(23, 59, 59, 999);
+    sameDayEnd.setUTCHours(23, 59, 59, 999);
 
     const duplicate = await Reservation.findOne({
       user: req.user.id,
@@ -155,13 +146,11 @@ export const addReservation = async (req, res) => {
     });
 
     if (duplicate) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message:
-            "You already have a reservation at this restaurant on this date",
-        });
+      return res.status(400).json({
+        success: false,
+        message:
+          "You already have a reservation at this restaurant on this date",
+      });
     }
 
     const reservation = await Reservation.create({
@@ -188,57 +177,52 @@ export const updateReservation = async (req, res) => {
     let reservation = await Reservation.findById(req.params.id);
 
     if (!reservation) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `No reservation with the id of ${req.params.id}`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `No reservation with the id of ${req.params.id}`,
+      });
     }
 
     if (
       reservation.user.toString() !== req.user.id.toString() &&
       req.user.role !== "admin"
     ) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: `User ${req.user.id} is not authorized to update this reservation`,
-        });
+      return res.status(401).json({
+        success: false,
+        message: `User ${req.user.id} is not authorized to update this reservation`,
+      });
     }
 
     if (req.body.reservation_date) {
       const resDate = new Date(req.body.reservation_date);
 
       if (resDate <= new Date()) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Reservation date must be in the future",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Reservation date must be in the future",
+        });
       }
 
       const restaurantId = req.body.restaurant_id || reservation.restaurant_id;
       const restaurant = await Restaurant.findById(restaurantId);
 
       if (restaurant && restaurant.open_time && restaurant.close_time) {
-        const resTotalMinutes = resDate.getHours() * 60 + resDate.getMinutes();
+        const resTotalMinutes =
+          resDate.getUTCHours() * 60 + resDate.getUTCMinutes();
+        const openTime = new Date(restaurant.open_time);
+        const closeTime = new Date(restaurant.close_time);
         const openMinutes =
-          new Date(restaurant.open_time).getHours() * 60 +
-          new Date(restaurant.open_time).getMinutes();
+          openTime.getUTCHours() * 60 + openTime.getUTCMinutes();
         const closeMinutes =
-          new Date(restaurant.close_time).getHours() * 60 +
-          new Date(restaurant.close_time).getMinutes();
+          closeTime.getUTCHours() * 60 + closeTime.getUTCMinutes();
 
         if (resTotalMinutes < openMinutes || resTotalMinutes > closeMinutes) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: `Restaurant is open from ${new Date(restaurant.open_time).toTimeString().slice(0, 5)} to ${new Date(restaurant.close_time).toTimeString().slice(0, 5)}`,
-            });
+          const openStr = `${String(openTime.getUTCHours()).padStart(2, "0")}:${String(openTime.getUTCMinutes()).padStart(2, "0")}`;
+          const closeStr = `${String(closeTime.getUTCHours()).padStart(2, "0")}:${String(closeTime.getUTCMinutes()).padStart(2, "0")}`;
+          return res.status(400).json({
+            success: false,
+            message: `Restaurant is open from ${openStr} to ${closeStr}`,
+          });
         }
       }
     }
@@ -264,36 +248,30 @@ export const deleteReservation = async (req, res) => {
     const reservation = await Reservation.findById(req.params.id);
 
     if (!reservation) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `No reservation with the id of ${req.params.id}`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `No reservation with the id of ${req.params.id}`,
+      });
     }
 
     if (
       reservation.user.toString() !== req.user.id.toString() &&
       req.user.role !== "admin"
     ) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: `User ${req.user.id} is not authorized to delete this reservation`,
-        });
+      return res.status(401).json({
+        success: false,
+        message: `User ${req.user.id} is not authorized to delete this reservation`,
+      });
     }
 
     if (req.user.role !== "admin") {
       const timeDiff = new Date(reservation.reservation_date) - new Date();
       if (timeDiff < 60 * 60 * 1000) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message:
-              "Cannot cancel reservation within 1 hour of reservation time",
-          });
+        return res.status(400).json({
+          success: false,
+          message:
+            "Cannot cancel reservation within 1 hour of reservation time",
+        });
       }
     }
 
