@@ -218,6 +218,29 @@ export const updateReservation = async (req, res) => {
           });
         }
       }
+
+      // Check duplicate reservation on same day at same restaurant (excluding current reservation)
+      const targetRestaurantId =
+        req.body.restaurant_id || reservation.restaurant_id;
+      const sameDayStart = new Date(resDate);
+      sameDayStart.setUTCHours(0, 0, 0, 0);
+      const sameDayEnd = new Date(resDate);
+      sameDayEnd.setUTCHours(23, 59, 59, 999);
+
+      const duplicate = await Reservation.findOne({
+        _id: { $ne: req.params.id },
+        user: reservation.user,
+        restaurant_id: targetRestaurantId,
+        reservation_date: { $gte: sameDayStart, $lte: sameDayEnd },
+      });
+
+      if (duplicate) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "You already have a reservation at this restaurant on this date",
+        });
+      }
     }
 
     reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body, {

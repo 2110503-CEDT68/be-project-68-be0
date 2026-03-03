@@ -562,6 +562,31 @@ describe("Reservation Routes", () => {
       expect(res.body.message).toMatch(/open from/i);
     });
 
+    it("should return 400 when updating to duplicate same day at same restaurant", async () => {
+      const ownReservation = {
+        ...mockReservationInstance,
+        user: mockUserInstance.id,
+        restaurant_id: mockRestaurantInstance._id,
+      };
+      const duplicateReservation = {
+        ...mockReservationInstance,
+        _id: "64a1b2c3d4e5f6a7b8c9d0ff",
+      };
+      mockUserModel.findById.mockResolvedValue(mockUserInstance);
+      mockReservationModel.findById.mockResolvedValue(ownReservation);
+      mockRestaurantModel.findById.mockResolvedValue(mockRestaurantInstance);
+      mockReservationModel.findOne.mockResolvedValue(duplicateReservation); // duplicate found
+
+      const res = await request(app)
+        .put(`/api/reservations/${RESERVATION_ID}`)
+        .set("Authorization", `Bearer ${USER_TOKEN}`)
+        .send({ reservation_date: updatedDate() });
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toMatch(/already have a reservation/i);
+    });
+
     it("should return 401 when no token provided", async () => {
       const res = await request(app)
         .put(`/api/reservations/${RESERVATION_ID}`)
@@ -585,6 +610,23 @@ describe("Reservation Routes", () => {
   });
 
   // ── DELETE /api/reservations/:id ──────────────────────────────────────
+
+  // ── protect middleware - deleted user ─────────────────────────────────
+
+  describe("protect middleware - deleted user", () => {
+    it("should return 401 when token is valid but user no longer exists in DB", async () => {
+      // User was deleted from DB after token was issued
+      mockUserModel.findById.mockResolvedValue(null);
+
+      const res = await request(app)
+        .get("/api/reservations")
+        .set("Authorization", `Bearer ${USER_TOKEN}`);
+
+      expect(res.statusCode).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toMatch(/not authorized/i);
+    });
+  });
 
   describe("DELETE /api/reservations/:id", () => {
     it("should return 200 on successful delete", async () => {

@@ -71,8 +71,8 @@ describe("Restaurant CRUD Routes", () => {
           name: "Test Restaurant",
           address: "123 Test St",
           telephone_number: "021234567",
-          open_time: new Date("2026-01-01T08:00:00Z"),
-          close_time: new Date("2026-01-01T20:00:00Z"),
+          open_time: "08:00",
+          close_time: "20:00",
         },
       ];
       mockFind.limit.mockResolvedValue(mockData);
@@ -189,8 +189,8 @@ describe("Restaurant CRUD Routes", () => {
       name: "New Restaurant",
       address: "456 New St",
       telephone_number: "029876543",
-      open_time: "2026-01-01T08:00:00Z",
-      close_time: "2026-01-01T20:00:00Z",
+      open_time: "08:00",
+      close_time: "20:00",
     };
 
     it("should return 201 when admin creates a restaurant", async () => {
